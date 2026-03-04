@@ -5,10 +5,7 @@
 ## 📋 คุณสมบัติของระบบ
 
 * **Data Processing**: ดึงข้อมูลจากไฟล์ `.txt` และแปลงค่า Acceleration เป็น RMS อัตโนมัติ.
-* 
-**ISO Analysis**: จำแนกสถานะเครื่องจักรเป็น 4 โซน (Green, Yellow, Orange, Red) ตามมาตรฐานสากล.
-
-
+* **ISO Analysis**: จำแนกสถานะเครื่องจักรเป็น 4 โซน (Green, Yellow, Orange, Red) ตามมาตรฐานสากล.
 * **Predictive Modeling**: ใช้ Linear Regression เพื่อคำนวณหา Remaining Useful Life (RUL).
 * **Environment Support**: ตั้งค่า Path ข้อมูลและเกณฑ์การตัดสินใจผ่านไฟล์ `.env`.
 
@@ -29,19 +26,7 @@ pip install -r requirements.txt
 
 ### 2. การตั้งค่า Environment (.env)
 
-สร้างไฟล์ชื่อ `.env` ไว้ที่ root directory ของโปรเจกต์ โดยอ้างอิงจากตัวอย่างใน `.env.example`:
-
-```env
-# Path Configuration
-DATA_PATH=./data
-EXPORT_PATH=./output
-
-# ISO 10816-3 Thresholds (mm/s RMS)
-THRESHOLD_YELLOW=2.3
-THRESHOLD_ORANGE=4.5
-THRESHOLD_RED=7.1
-
-```
+สร้างไฟล์ชื่อ `.env` ไว้ที่ root directory ของโปรเจกต์ โดยอ้างอิงจากตัวอย่างใน `.env.example` และแก้ไขค่าของแต่ละตัวแปรตามที่ต้องการ
 
 ### 3. การรันโปรแกรม
 
