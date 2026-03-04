@@ -17,10 +17,74 @@
 
 เครื่องของคุณต้องมี **Python 3.8+** และติดตั้ง Library ที่จำเป็นดังนี้:
 
-```bash
-pip install -r requirements.txt
+### การสร้าง Virtual Environment (แนะนำ)
+
+เพื่อความสะอาดของระบบและป้องกันความขัดแย้งของ Library แนะนำให้สร้าง Environment ก่อนติดตั้ง `requirements.txt` ตามขั้นตอนของแต่ละ OS ดังนี้:
+
+#### **สำหรับ Windows (PowerShell)**
+
+```powershell
+# 1. สร้าง Environment ชื่อ .venv
+python -m venv .venv
+
+# 2. Activate (เปิดใช้งาน)
+.\.venv\Scripts\Activate.ps1
 
 ```
+
+#### **สำหรับ Windows (Command Prompt)**
+
+```cmd
+# 1. สร้าง Environment
+python -m venv .venv
+
+# 2. Activate
+.venv\Scripts\activate
+
+```
+
+#### **สำหรับ macOS / Linux**
+
+```bash
+# 1. สร้าง Environment
+python3 -m venv .venv
+
+# 2. Activate
+source .venv/bin/activate
+
+```
+
+> **หมายเหตุ:** เมื่อทำการ Activate สำเร็จ คุณจะเห็นตัวอักษร `(.venv)` ปรากฏอยู่ที่หน้าชื่อบรรทัดใน Terminal ของคุณ หลังจากนั้นจึงค่อยเริ่มรันคำสั่ง `pip install -r requirements.txt` ครับ
+
+---
+
+### 💡 การปิดใช้งาน (Deactivate)
+
+เมื่อเลิกใช้งานโปรเจกต์นี้แล้ว คุณสามารถออกจาก Environment ได้ง่ายๆ ด้วยคำสั่ง:
+
+```bash
+deactivate
+
+```
+
+---
+
+### 🛠️ การ Maintenance โค้ดในอนาคต (เพิ่มเติม)
+
+เพื่อให้โปรเจกต์นี้ทำงานได้อย่างต่อเนื่องในระยะยาว ควรทำสิ่งต่อไปนี้:
+
+1. **Update Library**: หากมีการอัปเดต Library ใหม่ๆ ในอนาคต และคุณต้องการบันทึกเวอร์ชันปัจจุบันไว้ให้แม่นยำ ให้รันคำสั่ง:
+```bash
+pip freeze > requirements.txt
+
+```
+
+2. **Handle Data Scenarios**:
+* หากไฟล์ใน `data/` มีการเปลี่ยน Format (เช่น เปลี่ยนชื่อหัวคอลัมน์) ให้ไปแก้ไข Regex ใน `src/processor.py`
+* หากค่าพยากรณ์ใน `src/predictor.py` เริ่มไม่แม่นยำ ให้พิจารณาเปลี่ยนจาก `LinearRegression` เป็น `PolynomialFeatures` (องศาที่ 2) เพื่อรองรับกราฟที่เป็นเส้นโค้ง
+
+3. **Log Monitoring**: หากรันผ่าน Task Scheduler ในอนาคต ควรเพิ่มการเก็บ Log ไฟล์ลงในโฟลเดอร์ `logs/` เพื่อตรวจสอบ Error ย้อนหลัง
+
 
 *(Library หลักที่ใช้: `pandas`, `numpy`, `scikit-learn`, `python-dotenv`, `scipy`)*
 
