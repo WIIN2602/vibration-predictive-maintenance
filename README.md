@@ -1,7 +1,6 @@
-```markdown
 # 🛠️ Vibration Predictive Maintenance System (ISO 10816-3)
 
-ระบบวิเคราะห์และพยากรณ์ความเสียหายของเครื่องจักรหมุน (Rotating Machinery) โดยอ้างอิงตามมาตรฐาน **ISO 10816-3**. โปรแกรมนี้สามารถอ่านข้อมูลความสั่นสะเทือน, คำนวณค่า RMS, จำแนกสถานะความปลอดภัย และพยากรณ์วันที่คาดว่าเครื่องจักรจะชำรุดล่วงหน้าด้วย Machine Learning (Linear Regression).
+ระบบวิเคราะห์และพยากรณ์ความเสียหายของเครื่องจักรหมุน (Rotating Machinery) โดยอ้างอิงตามมาตรฐาน **ISO 10816-3**. โปรแกรมนี้สามารถอ่านข้อมูลความสั่นสะเทือน, คำนวณค่า RMS, จำแนกสถานะความปลอดภัย และพยากรณ์วันที่คาดว่าเครื่องจักรจะชำรุดล่วงหน้าด้วย Machine Learning (Linear Regression)
 
 ---
 
@@ -11,20 +10,20 @@
 * **⚠️ ISO Analysis**: จำแนกสถานะสุขภาพเครื่องจักรเป็น 4 โซน (Green, Yellow, Orange, Red) ตามเกณฑ์มาตรฐานสากล
 * **📈 Predictive Modeling**: ใช้ **Linear Regression** วิเคราะห์แนวโน้ม (Trend Analysis) เพื่อหา Remaining Useful Life (RUL)
 * **📊 Visualization**: สร้างกราฟเส้นแนวโน้ม (Trend Line) และจุดวิกฤต (Threshold) บันทึกเป็นไฟล์ `.png` อัตโนมัติ
-* **🖥️ Terminal UI**: แสดงผลรายงานสรุปในรูปแบบตาราง (Grid Table) ที่อ่านง่ายเหมือน SQL
-* **⚙️ Configurable**: รองรับการปรับเปลี่ยน Path และค่า Threshold ผ่านไฟล์ `.env` โดยไม่ต้องแก้โค้ด
+* **🖥️ Terminal UI**: แสดงผลรายงานสรุปในรูปแบบตาราง (Grid Table) ที่อ่านง่ายเหมือนการใช้คำสั่ง SQL
+* **⚙️ Configurable**: รองรับการปรับเปลี่ยน Path ข้อมูลและค่า Threshold ผ่านไฟล์ `.env` โดยไม่ต้องแก้ไขโค้ด
 
 ---
 
 ## 📊 ตัวอย่างผลลัพธ์ (Example Output)
 
 ### 1. รายงานบน Terminal (Executive Summary)
-!
-*(ระบบจะแสดงสถานะล่าสุด พร้อมวันที่คาดการณ์ว่าจะเกิดความเสียหาย)*
+แสดงตารางสรุปค่า RMS ล่าสุด, สถานะตามโซนสี, แนวโน้ม และวันที่คาดว่าจะเกิดความเสียหาย
+
 
 ### 2. กราฟวิเคราะห์แนวโน้ม (Trend Analysis Plot)
-!
-*(กราฟแสดงจุดข้อมูลจริง เส้นแนวโน้ม และเส้นขีดจำกัดอันตรายตาม ISO)*
+กราฟแสดงจุดข้อมูลจริง (Actual Data) เทียบกับเส้นพยากรณ์ (Trend Line) และเส้นระดับอันตราย (Danger Threshold)
+
 
 ---
 
@@ -39,7 +38,7 @@
     *(Library หลัก: `pandas`, `numpy`, `scikit-learn`, `matplotlib`, `tabulate`, `python-dotenv`)*
 
 ### 2. การตั้งค่า Environment (.env)
-สร้างไฟล์ `.env` ที่ Root Directory และกำหนดค่าดังนี้:
+สร้างไฟล์ `.env` ที่ Root Directory ของโปรเจกต์ และกำหนดค่าดังนี้:
 ```env
 DATA_PATH=./data
 EXPORT_PATH=./output
@@ -47,7 +46,7 @@ THRESHOLD_RED=7.1
 ```
 
 ### 3. การรันโปรแกรม
-วางไฟล์ข้อมูล `.txt` ไว้ในโฟลเดอร์ `data/` จากนั้นรัน:
+วางไฟล์ข้อมูล `.txt` ที่ดึงมาจากเซนเซอร์ไว้ในโฟลเดอร์ `data/` จากนั้นรันคำสั่ง:
 ```bash
 python main.py
 ```
@@ -58,21 +57,22 @@ python main.py
 
 ```text
 vibration-predictive-maintenance/
-├── data/               # ข้อมูลความสั่นสะเทือนดิบ (.txt)
-├── output/             # รายงานสรุป (.csv) และกราฟแนวโน้ม (.png)
-├── src/                # Source code แยกตามหน้าที่
-│   ├── processor.py    # Parser ดึงข้อมูลและคำนวณ RMS
-│   ├── analyzer.py     # Classify สถานะตาม ISO 10816-3
-│   └── predictor.py    # ML Model และระบบสร้าง Visualization
-├── .env                # ไฟล์ตั้งค่าระบบ
-├── main.py             # Entry point สำหรับรันระบบทั้งหมด
-└── requirements.txt    # รายการ Library ที่ต้องใช้
+├── data/               # โฟลเดอร์เก็บไฟล์ข้อมูลดิบ (.txt)
+├── output/             # โฟลเดอร์เก็บรายงาน (.csv) และกราฟ (.png)
+├── src/                # Source code แยกตามโมดูล
+│   ├── processor.py    # ส่วนประมวลผลข้อมูลและคำนวณ RMS
+│   ├── analyzer.py     # ส่วนวิเคราะห์สถานะตามมาตรฐาน ISO
+│   └── predictor.py    # ส่วนพยากรณ์และสร้าง Visualization
+├── .env                # ไฟล์กำหนดค่าตัวแปรระบบ
+├── main.py             # จุดเริ่มต้นการรันโปรแกรม (Entry Point)
+└── requirements.txt    # รายการ Library สำหรับติดตั้ง
 ```
 
 ---
 
 ## 🔧 การดูแลรักษา (Maintenance & Future Updates)
 
-1.  **การปรับปรุงโมเดล**: หากข้อมูลมีลักษณะไม่เป็นเส้นตรง (Non-linear) สามารถเปลี่ยนจาก `LinearRegression` เป็น `PolynomialFeatures` ใน `src/predictor.py`
-2.  **การเพิ่มเครื่องจักร**: เพียงเพิ่มไฟล์ `.txt` ลงในโฟลเดอร์ `data` ระบบจะทำการวนลูปประมวลผลและสร้างกราฟให้เครื่องใหม่โดยอัตโนมัติ
-3.  **การอัปเดตเกณฑ์**: สามารถปรับค่า `THRESHOLD_YELLOW/ORANGE/RED` ใน `.env` ได้ทันทีเมื่อมีการเปลี่ยนกลุ่มเครื่องจักร (Machine Group 1-4)
+1.  **การปรับปรุงโมเดล**: หากข้อมูลมีลักษณะความชันไม่คงที่ (Non-linear) สามารถพิจารณาเปลี่ยนจาก `LinearRegression` เป็น `PolynomialFeatures` ใน `src/predictor.py`
+2.  **การเพิ่มเครื่องจักร**: ระบบรองรับการเพิ่มข้อมูลเครื่องจักรใหม่โดยอัตโนมัติ เพียงเพิ่มไฟล์ `.txt` ลงในโฟลเดอร์ `data` ระบบจะทำการวนลูปประมวลผลให้เอง
+3.  **การอัปเดตเกณฑ์**: สามารถปรับค่า `THRESHOLD` ในไฟล์ `.env` ได้ทันทีเมื่อมีการเปลี่ยนกลุ่มเครื่องจักรตามมาตรฐาน ISO 10816-3 (Machine Group 1-4)
+4.  **การแสดงผล**: หากตารางใน Terminal แสดงผลไม่พอดีหน้าจอ สามารถขยายหน้าต่าง Terminal หรือปรับปรุงการตัดคำใน `main.py` ส่วนการเรียกใช้งาน `tabulate`
