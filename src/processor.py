@@ -3,6 +3,7 @@ import numpy as np
 import re
 import os
 from dotenv import load_dotenv
+from tabulate import tabulate
 
 # โหลดค่าจากไฟล์ .env
 load_dotenv()
@@ -46,15 +47,12 @@ def calculate_velocity_rms(amplitudes):
 def process_all_data(data_dir=None):
     """
     วนลูปอ่านทุกไฟล์ในโฟลเดอร์ data เพื่อสรุปผลเป็น DataFrame
-    หากไม่ระบุ data_dir จะไปดึงค่าจาก .env (DATA_PATH)
     """
-    # ถ้าไม่ได้ส่ง data_dir มา ให้ใช้ค่าจาก .env ถ้าไม่มีใน .env ให้ใช้ค่า Default เป็น './data'
     if data_dir is None:
         data_dir = os.getenv("DATA_PATH", "./data")
 
     summary = []
     
-    # ตรวจสอบว่า Path มีอยู่จริงหรือไม่
     if not os.path.exists(data_dir):
         print(f"[Error] Data directory not found: {data_dir}")
         return pd.DataFrame()
@@ -77,9 +75,13 @@ def process_all_data(data_dir=None):
 
 # สำหรับทดสอบรันเฉพาะไฟล์นี้
 if __name__ == "__main__":
-    # เรียกใช้งานโดยให้ดึง Path จาก .env อัตโนมัติ
     df = process_all_data()
     if not df.empty:
-        print(df)
+        print("\n" + "="*80)
+        print("      DATA PROCESSOR TEST RESULT (Extracted from .txt files)")
+        print("="*80)
+        # ใช้ tabulate แสดงผลเป็นตารางแบบ grid
+        print(tabulate(df, headers='keys', tablefmt='grid', showindex=False))
+        print("="*80)
     else:
         print("No data processed.")
