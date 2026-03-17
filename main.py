@@ -18,23 +18,33 @@ def run_maintenance_system():
     if not os.path.exists(export_path):
         os.makedirs(export_path)
 
-    print("="*50)
-    print("VIBRATION PREDICTIVE MAINTENANCE SYSTEM")
-    print(f"Working Directory: {data_path}")
-    print("="*50)
+    print("\n" + "="*60)
+    print("   VIBRATION PREDICTIVE MAINTENANCE SYSTEM (ISO 10816-3)")
+    print(f"   Working Directory: {data_path}")
+    print("="*60)
 
     # 1. Process Data
     df = process_all_data(data_path)
-    
+    if df.empty:
+        print("[Error] No data found in the specified directory.")
+        return
+
     # 2. Analyze
     analyzer = ISOAnalyzer()
     df = analyzer.analyze_dataframe(df)
     
-    # 3. Predict
+    # 3. Predict & Generate Report
     predictor = VibrationPredictor()
     report = []
+    unique_equipment = sorted(df['Equipment'].unique())
 
-    for equipment in df['Equipment'].unique():
+    # สร้างรายชื่อเครื่องจักรพร้อมรันเลข ID
+    eq_list_for_menu = []
+    for idx, name in enumerate(unique_equipment, 1):
+        eq_list_for_menu.append({"ID": idx, "Equipment Name": name})
+
+    # ประมวลผลข้อมูลทั้งหมดเก็บไว้ใน List
+    for equipment in unique_equipment:
         eq_data = df[df['Equipment'] == equipment]
         latest_status = eq_data.iloc[-1]['ISO_Status']
         latest_rms = eq_data.iloc[-1]['RMS_Value']
@@ -42,24 +52,47 @@ def run_maintenance_system():
         
         report.append({
             'Equipment': equipment,
-            'Latest_RMS': f"{latest_rms:.2f}",
+            'Latest_RMS': float(f"{latest_rms:.2f}"),
             'Current_Status': latest_status,
             'Trend': trend,
             'Est_Failure_Date': fail_date if fail_date else "N/A"
         })
 
-    # 4. แสดงผลและส่งออกไฟล์
     report_df = pd.DataFrame(report)
+
+    # --- ส่วน Interactive Menu สำหรับเลือกเครื่องจักร ---
+    print("\n[ Available Equipment List ]")
+    print(tabulate(eq_list_for_menu, headers='keys', tablefmt='simple', showindex=False))
+    print("-" * 30)
     
-    print("\n" + "="*80)
-    print("      EXECUTIVE SUMMARY REPORT (ISO 10816-3 Analysis)")
-    print("="*80)
-    print(tabulate(report_df, headers='keys', tablefmt='grid', showindex=False))
+    user_input = input("Enter Equipment ID to filter (or press Enter to show ALL): ").strip()
+
+    # ตรรกะการกรองข้อมูล
+    if user_input.isdigit():
+        choice = int(user_input)
+        if 1 <= choice <= len(unique_equipment):
+            selected_name = unique_equipment[choice - 1]
+            display_df = report_df[report_df['Equipment'] == selected_name]
+            print(f"\n[INFO] Filtering for: {selected_name}")
+        else:
+            print(f"\n[!] Invalid ID. Showing all equipment instead.")
+            display_df = report_df
+    else:
+        display_df = report_df
+
+    # 4. แสดงผลตารางสรุป
+    print("\n" + "="*95)
+    print("             EXECUTIVE SUMMARY REPORT (ISO 10816-3 Analysis)")
+    print("="*95)
+    print(tabulate(display_df, headers='keys', tablefmt='grid', showindex=False))
+    
+    # บันทึกไฟล์ CSV (บันทึกข้อมูลทั้งหมดเสมอเพื่อการใช้งานภาพรวม)
     file_name = "maintenance_report.csv"
     save_path = os.path.join(export_path, file_name)
     report_df.to_csv(save_path, index=False)
-    print(f"\n[INFO] Report saved successfully to: {save_path}")
-    print("="*80)
+    
+    print(f"\n[SUCCESS] Full report saved to: {save_path}")
+    print("="*95)
 
 if __name__ == "__main__":
     run_maintenance_system()
