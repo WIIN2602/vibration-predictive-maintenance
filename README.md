@@ -38,7 +38,7 @@
     *(Library หลัก: `pandas`, `numpy`, `scikit-learn`, `matplotlib`, `tabulate`, `python-dotenv`)*
 
 ### 2. การตั้งค่า Environment (.env)
-สร้างไฟล์ `.env` ที่ Root Directory ของโปรเจกต์ และกำหนดค่าดังนี้:
+คัดลอกไฟล์ `.env.example` ที่ Root Directory ของโปรเจกต์แล้ววางที่เดิม จากนั้นลบ `.example` ในชื่อออกและกำหนดค่าดังนี้:
 ```env
 DATA_PATH=./data
 EXPORT_PATH=./output
