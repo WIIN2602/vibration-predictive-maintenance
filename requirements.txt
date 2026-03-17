@@ -6,3 +6,5 @@ matplotlib == 3.10.8
 seaborn == 0.13.2
 jupyterlab == 4.5.5
 python-dotenv == 1.2.2
+matplotlib == 3.10.8
+tabulate == 0.10.0

@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from src.processor import process_all_data
 from src.analyzer import ISOAnalyzer
 from src.predictor import VibrationPredictor
+from tabulate import tabulate
 
 # โหลดค่าจากไฟล์ .env
 load_dotenv()
@@ -37,7 +38,7 @@ def run_maintenance_system():
         eq_data = df[df['Equipment'] == equipment]
         latest_status = eq_data.iloc[-1]['ISO_Status']
         latest_rms = eq_data.iloc[-1]['RMS_Value']
-        trend, fail_date = predictor.predict_rul(eq_data)
+        trend, fail_date = predictor.predict_rul(eq_data, save_graph_path=export_path)
         
         report.append({
             'Equipment': equipment,
@@ -49,16 +50,16 @@ def run_maintenance_system():
 
     # 4. แสดงผลและส่งออกไฟล์
     report_df = pd.DataFrame(report)
-    print("\n--- EXECUTIVE SUMMARY REPORT ---")
-    print(report_df.to_string(index=False))
     
-    # การส่งออกผลลัพธ์ไปยังพาธที่ระบุใน .env
+    print("\n" + "="*80)
+    print("      EXECUTIVE SUMMARY REPORT (ISO 10816-3 Analysis)")
+    print("="*80)
+    print(tabulate(report_df, headers='keys', tablefmt='grid', showindex=False))
     file_name = "maintenance_report.csv"
     save_path = os.path.join(export_path, file_name)
-    
     report_df.to_csv(save_path, index=False)
     print(f"\n[INFO] Report saved successfully to: {save_path}")
-    print("="*50)
+    print("="*80)
 
 if __name__ == "__main__":
     run_maintenance_system()
